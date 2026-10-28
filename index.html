@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#161a3a">
+<title>倒水排序</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg class="svg-defs" aria-hidden="true">
+  <defs>
+    <clipPath id="vial-clip" clipPathUnits="objectBoundingBox">
+      <path d="M0.38,0.08 C0.38,0.08,0.36,0.115,0.36,0.15 L0.36,0.21 C0.36,0.27,0.24,0.32,0.17,0.37 C0.11,0.42,0.10,0.48,0.10,0.54 L0.10,0.83 C0.10,0.93,0.27,0.982,0.50,0.982 C0.73,0.982,0.90,0.93,0.90,0.83 L0.90,0.54 C0.90,0.48,0.89,0.42,0.83,0.37 C0.76,0.32,0.64,0.27,0.64,0.21 L0.64,0.15 C0.64,0.115,0.62,0.08,0.62,0.08 Z"/>
+    </clipPath>
+  </defs>
+</svg>
+<div class="app">
+  <header class="head">
+    <div class="title-row">
+      <h1><span class="logo" aria-hidden="true"></span>倒水排序</h1>
+      <div class="pills">
+        <span class="pill" id="level">第 1 关</span>
+        <span class="pill">步数 <b id="moves">0</b></span>
+      </div>
+    </div>
+    <div class="actions">
+      <button type="button" id="undo">撤销</button>
+      <button type="button" id="restart">重开</button>
+      <button type="button" id="hint">提示</button>
+      <button type="button" id="add-vial" class="hidden">加瓶</button>
+      <button type="button" id="skip" class="hidden">跳关</button>
+    </div>
+  </header>
+  <main class="stage" id="stage">
+    <div class="rack" id="rack" role="group" aria-label="水瓶"></div>
+    <svg id="stream" aria-hidden="true">
+      <path id="stream-glow"></path>
+      <path id="stream-body"></path>
+      <path id="stream-sheen"></path>
+      <circle id="stream-drop"></circle>
+    </svg>
+  </main>
+  <p class="tip">点一瓶拿起，再点另一瓶倒入。同色才能叠，空瓶也可以。</p>
+  <p class="sr" id="status" aria-live="polite"></p>
+  <div class="overlay hidden" id="overlay">
+    <div class="card">
+      <div class="card-mark" id="ov-mark">✓</div>
+      <h2 id="ov-title"></h2>
+      <p id="ov-text"></p>
+      <div class="card-actions">
+        <button type="button" class="ghost" id="ov-secondary"></button>
+        <button type="button" class="primary" id="ov-primary"></button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+window.WATER_ADS = {
+  blockId: '',
+  debug: false
+};
+</script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+<script src="ads.js"></script>
+<script src="logic.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
