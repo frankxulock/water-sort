@@ -6,14 +6,14 @@
   if (!L) return;
 
   var COLORS = [
-    { name: '红', hex: '#ff4d6e', deep: '#c41048', lite: '#ffd0dc' },
-    { name: '橙', hex: '#ff8a24', deep: '#d85a00', lite: '#ffe0b8' },
-    { name: '黄', hex: '#f6c431', deep: '#d09a00', lite: '#fff3c4' },
-    { name: '绿', hex: '#3dce74', deep: '#128a44', lite: '#d9ffe8' },
-    { name: '青', hex: '#2ad4c8', deep: '#0c8f86', lite: '#d7fff8' },
-    { name: '蓝', hex: '#4c8dff', deep: '#2458d4', lite: '#dce8ff' },
-    { name: '紫', hex: '#b06bff', deep: '#722ee0', lite: '#eddfff' },
-    { name: '粉', hex: '#ff6bb5', deep: '#d42e7c', lite: '#ffd6ea' }
+    { name: '红', hex: '#ff4d6e', deep: '#c41048', lite: '#ff9aaf' },
+    { name: '橙', hex: '#ff8a24', deep: '#d85a00', lite: '#ffc27a' },
+    { name: '黄', hex: '#f6c431', deep: '#d09a00', lite: '#ffe28a' },
+    { name: '绿', hex: '#3dce74', deep: '#128a44', lite: '#8ef0b4' },
+    { name: '青', hex: '#2ad4c8', deep: '#0c8f86', lite: '#8af3e8' },
+    { name: '蓝', hex: '#4c8dff', deep: '#2458d4', lite: '#a4c4ff' },
+    { name: '紫', hex: '#b06bff', deep: '#722ee0', lite: '#d4b0ff' },
+    { name: '粉', hex: '#ff6bb5', deep: '#d42e7c', lite: '#ffb0d6' }
   ];
 
   var STORAGE = 'water-sort-puzzle-v1';
@@ -149,7 +149,7 @@
       var tubeH = parseFloat(getComputedStyle(rack).getPropertyValue('--tube-h')) || 180;
       h = tubeH - 28;
     }
-    return Math.max(8, (h * 0.72) / L.CAPACITY);
+    return Math.max(8, (h * 0.64) / L.CAPACITY);
   }
 
   function paintTube(index, tube, delta, color) {
@@ -158,18 +158,35 @@
     var juice = el.querySelector('.juice');
     var unit = unitFor(el);
     var layers = layersFrom(tube, delta, color);
-    while (juice.children.length > layers.length) juice.removeChild(juice.lastChild);
+    var nodes = juice.querySelectorAll('.layer');
+    while (nodes.length > layers.length) {
+      juice.removeChild(nodes[nodes.length - 1]);
+      nodes = juice.querySelectorAll('.layer');
+    }
+    if (!juice.querySelector('.well')) {
+      var well = document.createElement('div');
+      well.className = 'well';
+      juice.insertBefore(well, juice.firstChild);
+    }
     for (var i = 0; i < layers.length; i++) {
-      var node = juice.children[i];
+      var node = juice.querySelectorAll('.layer')[i];
       if (!node) {
         node = document.createElement('div');
         node.className = 'layer';
         juice.appendChild(node);
       }
       var col = colorOf(layers[i].color);
-      node.style.height = (layers[i].h * unit) + 'px';
+      var glassH = el.querySelector('.glass').clientHeight || unit * L.CAPACITY / 0.64;
+      var extra = i === 0 ? glassH * 0.28 : 0;
+      node.style.height = (layers[i].h * unit + extra) + 'px';
       node.style.setProperty('--lite', col.lite);
-      node.style.background = 'linear-gradient(90deg,' + col.deep + ' 0%,' + col.hex + ' 18%,' + col.hex + ' 78%,' + col.deep + ' 100%)';
+      node.style.setProperty('--hex', col.hex);
+      node.style.setProperty('--deep', col.deep);
+      node.style.backgroundColor = col.deep;
+      node.style.backgroundImage = [
+        'linear-gradient(90deg,' + col.deep + ' 0%,' + col.hex + ' 16%,' + col.lite + ' 34%,' + col.hex + ' 62%,' + col.deep + ' 100%)',
+        'linear-gradient(180deg,' + col.hex + ' 0%,' + col.hex + ' 55%,' + col.deep + ' 100%)'
+      ].join(',');
     }
     el.setAttribute('aria-label', aria(index, delta ? tube : (state.tubes[index] || tube)));
   }
@@ -185,9 +202,9 @@
     var gapY = 18;
     var padT = 26;
     var tubeW = Math.floor((w - gapX * (cols - 1)) / cols);
-    tubeW = Math.max(48, Math.min(tubeW, 84));
+    tubeW = Math.max(58, Math.min(tubeW, 96));
     var tubeH = Math.floor((h - padT - gapY * (rows - 1)) / rows);
-    var maxH = Math.min(250, tubeW * 3.35);
+    var maxH = Math.min(228, tubeW * 2.55);
     tubeH = Math.max(120, Math.min(tubeH, maxH));
     var need = rows * tubeH + (rows - 1) * gapY + padT;
     if (need > h && h > 80) {
@@ -205,9 +222,9 @@
     btn.className = 'tube';
     btn.dataset.i = String(index);
     btn.innerHTML = '<div class="bottle"><span class="lip"></span>'
-      + '<svg class="shell shell-back" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M38,8 C38,8,36,11.5,36,15 L36,21 C36,27,24,32,17,37 C11,42,10,48,10,54 L10,83 C10,93,27,98.2,50,98.2 C73,98.2,90,93,90,83 L90,54 C90,48,89,42,83,37 C76,32,64,27,64,21 L64,15 C64,11.5,62,8,62,8 Z"/></svg>'
+      + '<svg class="shell shell-back" viewBox="0 0 100 260" preserveAspectRatio="none" aria-hidden="true"><path d="M37,16 C37,16,35,22,35,30 L35,42 C35,54,20,64,14,78 C8,92,8,104,8,116 L8,214 C8,242,26,254,50,254 C74,254,92,242,92,214 L92,116 C92,104,92,92,86,78 C80,64,65,54,65,42 L65,30 C65,22,63,16,63,16 Z"/></svg>'
       + '<div class="glass"><div class="juice"></div></div>'
-      + '<svg class="shell shell-front" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path class="shell-body" d="M38,8 C38,8,36,11.5,36,15 L36,21 C36,27,24,32,17,37 C11,42,10,48,10,54 L10,83 C10,93,27,98.2,50,98.2 C73,98.2,90,93,90,83 L90,54 C90,48,89,42,83,37 C76,32,64,27,64,21 L64,15 C64,11.5,62,8,62,8 Z"/><ellipse class="shell-rim" cx="50" cy="7" rx="15.2" ry="4.1"/><ellipse class="shell-hole" cx="50" cy="7" rx="10.4" ry="2.3"/><path class="shell-shine" d="M20,46 C17.5,60,17.5,74,20,88"/></svg>'
+      + '<svg class="shell shell-front" viewBox="0 0 100 260" preserveAspectRatio="none" aria-hidden="true"><path class="shell-body" d="M37,16 C37,16,35,22,35,30 L35,42 C35,54,20,64,14,78 C8,92,8,104,8,116 L8,214 C8,242,26,254,50,254 C74,254,92,242,92,214 L92,116 C92,104,92,92,86,78 C80,64,65,54,65,42 L65,30 C65,22,63,16,63,16 Z"/><ellipse class="shell-rim" cx="50" cy="14" rx="17" ry="8"/><ellipse class="shell-hole" cx="50" cy="14" rx="11" ry="4.2"/><path class="shell-shine" d="M18,100 C15,140,15,180,18,214"/></svg>'
       + '</div><div class="cork"></div>';
     btn.addEventListener('click', function () { onTube(index); });
     return btn;
@@ -305,7 +322,7 @@
     var y1 = lip.top + lip.height / 2 - stageRect.top;
     var x2 = mouth.left + mouth.width / 2 - stageRect.left;
     var glass = tubeEls[to].querySelector('.glass').getBoundingClientRect();
-    var topLayer = tubeEls[to].querySelector('.juice').lastElementChild;
+    var topLayer = tubeEls[to].querySelector('.juice > .layer:last-child');
     var surface = topLayer ? topLayer.getBoundingClientRect().top : glass.bottom - 14;
     var y2 = surface - stageRect.top;
     y2 = Math.max(y1 + 36, Math.min(y2, glass.bottom - stageRect.top - 8));
@@ -375,68 +392,79 @@
     }
 
     var stageRect = stage.getBoundingClientRect();
-    var dstBox = tubeEls[to].getBoundingClientRect();
-    var srcBox = srcEl.getBoundingClientRect();
-    var srcCenter = srcBox.left + srcBox.width / 2;
-    var gap = (dstBox.left + dstBox.width / 2) - srcCenter;
-    var dir = gap >= 0 ? 1 : -1;
+    var dstBottle = dstEl.querySelector('.bottle').getBoundingClientRect();
     var bottleEl = srcEl.querySelector('.bottle');
-    var bottleH = bottleEl.clientHeight || 180;
-    var arm = bottleH * 0.88;
-    var halfW = (bottleEl.clientWidth || 48) / 2;
-    var armBot = Math.max(8, bottleH - arm);
+    var srcBottle = bottleEl.getBoundingClientRect();
+    var srcCenter = srcBottle.left + srcBottle.width / 2;
+    var gap = (dstBottle.left + dstBottle.width / 2) - srcCenter;
+    var dir = gap >= 0 ? 1 : -1;
+    var bottleH = srcBottle.height || bottleEl.clientHeight || 180;
+    var halfW = srcBottle.width / 2;
+    var pivot = bottleH * 0.88;
+    var lipArm = bottleH * 0.83;
+    var fillPx = before[from].length * unitFor(srcEl);
+    var gap0 = Math.max(10, bottleH - fillPx - bottleH * 0.05);
+    var cosA = 1 - gap0 / lipArm;
+    if (cosA < 0.1) cosA = 0.1;
+    if (cosA > 0.93) cosA = 0.93;
+    var angle = Math.acos(cosA) * 180 / Math.PI;
     var srcLip = srcEl.querySelector('.lip').getBoundingClientRect().top;
     var dstLip = dstEl.querySelector('.lip').getBoundingClientRect().top;
-    var hover = 20;
-    var pad = 6;
-    function cornerX(th, x, y) {
-      return Math.cos(th) * x - Math.sin(th) * y;
+    var hover = 16;
+    var pad = 8;
+    var th = dir * angle * Math.PI / 180;
+    function rotPoint(x, y) {
+      return {
+        x: Math.cos(th) * x - Math.sin(th) * y,
+        y: Math.sin(th) * x + Math.cos(th) * y
+      };
     }
-    var angle = 22;
-    var txTip = 0;
-    var tyTip = 0;
-    for (var a = 48; a >= 22; a -= 2) {
-      var th = dir * a * Math.PI / 180;
-      var xs = [
-        cornerX(th, halfW, -arm),
-        cornerX(th, -halfW, -arm),
-        cornerX(th, halfW, armBot),
-        cornerX(th, -halfW, armBot)
-      ];
-      var swingTry = arm * Math.sin(Math.abs(th));
-      var txTry = gap - dir * swingTry;
-      var origin = srcCenter + txTry;
-      var minX = origin + Math.min.apply(null, xs);
-      var maxX = origin + Math.max.apply(null, xs);
-      txTip = txTry;
-      tyTip = dstLip - srcLip - hover - arm * (1 - Math.cos(Math.abs(th)));
-      angle = a;
-      if (minX >= stageRect.left + pad && maxX <= stageRect.right - pad) break;
+    var pts = [
+      rotPoint(halfW, -pivot),
+      rotPoint(-halfW, -pivot),
+      rotPoint(halfW, bottleH - pivot),
+      rotPoint(-halfW, bottleH - pivot)
+    ];
+    var minX = pts[0].x;
+    var maxX = pts[0].x;
+    var minY = pts[0].y;
+    var maxY = pts[0].y;
+    for (var pi = 1; pi < pts.length; pi++) {
+      if (pts[pi].x < minX) minX = pts[pi].x;
+      if (pts[pi].x > maxX) maxX = pts[pi].x;
+      if (pts[pi].y < minY) minY = pts[pi].y;
+      if (pts[pi].y > maxY) maxY = pts[pi].y;
     }
+    var txTip = gap - lipArm * Math.sin(th);
+    var tyTip = dstLip - srcLip - hover - lipArm * (1 - Math.cos(Math.abs(th)));
+    var pivotX = srcCenter + txTip;
+    var pivotY = srcBottle.top + pivot + tyTip;
+    if (pivotX + minX < stageRect.left + pad) txTip += (stageRect.left + pad) - (pivotX + minX);
+    if (pivotX + maxX > stageRect.right - pad) txTip -= (pivotX + maxX) - (stageRect.right - pad);
+    pivotY = srcBottle.top + pivot + tyTip;
+    if (pivotY + minY < stageRect.top + pad) tyTip += (stageRect.top + pad) - (pivotY + minY);
+    if (pivotY + maxY > stageRect.bottom - pad) tyTip -= (pivotY + maxY) - (stageRect.bottom - pad);
     var side = dir * Math.min(28, Math.abs(gap) * 0.35);
-    var tubeHalf = srcBox.width / 2;
     var txGo = gap - side;
-    var minTx = stageRect.left + pad + tubeHalf - srcCenter;
-    var maxTx = stageRect.right - pad - tubeHalf - srcCenter;
+    var minTx = stageRect.left + pad + halfW - srcCenter;
+    var maxTx = stageRect.right - pad - halfW - srcCenter;
     txGo = Math.max(minTx, Math.min(maxTx, txGo));
     var tyGo = Math.max(-520, Math.min(8, dstLip - srcLip - hover));
-    txTip = Math.max(-240, Math.min(240, txTip));
-    tyTip = Math.max(-520, Math.min(8, tyTip));
     var goMs = Math.round(Math.min(440, 200 + Math.hypot(txGo, tyGo) * 0.42));
-    var tiltMs = 240;
+    var tiltMs = Math.round(Math.min(380, 200 + angle * 2));
     var juiceEl = srcEl.querySelector('.juice');
+    if (bottleEl) bottleEl.style.transition = 'none';
+    if (juiceEl) juiceEl.style.transition = 'none';
     srcEl.style.setProperty('--tilt', '0deg');
     srcEl.style.transition = 'transform ' + goMs + 'ms cubic-bezier(.22, .85, .28, 1)';
     srcEl.style.transform = 'translate(' + txGo.toFixed(1) + 'px, ' + tyGo.toFixed(1) + 'px)';
-    if (bottleEl) bottleEl.style.transition = 'transform ' + tiltMs + 'ms ease-in-out';
-    if (juiceEl) juiceEl.style.transition = 'transform ' + tiltMs + 'ms ease-in-out';
 
     var flowMs = 340 + res.count * 180;
     var tipAt = goMs + 40;
 
     setTimeout(function () {
       if (token !== animToken) return;
-      srcEl.style.transition = 'transform ' + tiltMs + 'ms ease-in-out';
+      srcEl.style.transition = 'transform ' + tiltMs + 'ms ease-in-out, --tilt ' + tiltMs + 'ms ease-in-out';
       srcEl.style.transform = 'translate(' + txTip.toFixed(1) + 'px, ' + tyTip.toFixed(1) + 'px)';
       srcEl.style.setProperty('--tilt', (dir * angle).toFixed(1) + 'deg');
     }, tipAt);
@@ -462,7 +490,7 @@
         return;
       }
       hideStream();
-      srcEl.style.transition = 'transform ' + tiltMs + 'ms ease-in-out';
+      srcEl.style.transition = 'transform ' + tiltMs + 'ms ease-in-out, --tilt ' + tiltMs + 'ms ease-in-out';
       srcEl.style.transform = 'translate(' + txGo.toFixed(1) + 'px, ' + tyGo.toFixed(1) + 'px)';
       srcEl.style.setProperty('--tilt', '0deg');
       setTimeout(function () {
