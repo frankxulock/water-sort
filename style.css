@@ -111,6 +111,7 @@ h1 {
 }
 .actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 10px;
 }
@@ -124,7 +125,7 @@ h1 {
   background: rgba(255, 255, 255, 0.08);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
 }
-.actions button { flex: 1; }
+.actions button { flex: 1 1 calc(33.33% - 8px); min-width: 0; padding: 9px 8px; }
 .actions button:disabled { opacity: 0.38; cursor: default; }
 .actions button.hidden { display: none; }
 .actions button:active:not(:disabled), .card button:active { transform: translateY(1px); }
@@ -407,10 +408,11 @@ h1 {
 .card p { font-size: 14px; color: #c5d4ea; line-height: 1.5; }
 .card-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 16px;
 }
-.card-actions button { flex: 1; }
+.card-actions button { flex: 1 1 calc(50% - 8px); }
 .card button.primary {
   background: linear-gradient(180deg, #21b39a, #0e8f86);
   color: #fff;

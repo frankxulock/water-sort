@@ -21,7 +21,8 @@
   var STR = {
     'zh-CN': {
       title: '倒水排序', level: '第 {n} 关', moves: '步数',
-      undo: '撤销', restart: '重开', hint: '提示', hintAd: '广告提示', addVial: '加瓶', skip: '跳关',
+      undo: '撤销', restart: '重开', hint: '提示', hintAd: '广告提示', addVial: '加瓶', skip: '跳关', share: '分享',
+      shareText: '我在倒水排序打到第 {n} 关，用了 {moves} 步。', copied: '链接已复制',
       tip: '点一瓶拿起，再点另一瓶倒入。同色才能叠，空瓶也可以。', rack: '水瓶', sep: '、', done: '，已完成',
       bottleEmpty: '第{n}瓶，空', bottle: '第{n}瓶，从底到顶 {colors}',
       pour: '把{color}色倒进第{n}瓶', pick: '拿起第{n}瓶', drop: '放下了', swap: '改拿第{n}瓶', blocked: '倒不进去',
@@ -36,7 +37,8 @@
     },
     'zh-TW': {
       title: '倒水排序', level: '第 {n} 關', moves: '步數',
-      undo: '撤銷', restart: '重開', hint: '提示', hintAd: '廣告提示', addVial: '加瓶', skip: '跳關',
+      undo: '撤銷', restart: '重開', hint: '提示', hintAd: '廣告提示', addVial: '加瓶', skip: '跳關', share: '分享',
+      shareText: '我在倒水排序打到第 {n} 關，用了 {moves} 步。', copied: '連結已複製',
       tip: '點一瓶拿起，再點另一瓶倒入。同色才能疊，空瓶也可以。', rack: '水瓶', sep: '、', done: '，已完成',
       bottleEmpty: '第{n}瓶，空', bottle: '第{n}瓶，從底到頂 {colors}',
       pour: '把{color}色倒進第{n}瓶', pick: '拿起第{n}瓶', drop: '放下了', swap: '改拿第{n}瓶', blocked: '倒不進去',
@@ -51,7 +53,8 @@
     },
     en: {
       title: 'Water Sort', level: 'Level {n}', moves: 'Moves',
-      undo: 'Undo', restart: 'Restart', hint: 'Hint', hintAd: 'Ad hint', addVial: '+Tube', skip: 'Skip',
+      undo: 'Undo', restart: 'Restart', hint: 'Hint', hintAd: 'Ad hint', addVial: '+Tube', skip: 'Skip', share: 'Share',
+      shareText: 'I reached level {n} in Water Sort in {moves} moves.', copied: 'Link copied',
       tip: 'Tap a tube, then another. Only matching colors stack. Empty tubes are fine.', rack: 'Tubes', sep: ', ', done: ', done',
       bottleEmpty: 'Tube {n}, empty', bottle: 'Tube {n}, bottom to top {colors}',
       pour: 'Pour {color} into tube {n}', pick: 'Picked up tube {n}', drop: 'Put it down', swap: 'Switched to tube {n}', blocked: 'Cannot pour there',
@@ -66,7 +69,8 @@
     },
     ja: {
       title: 'ウォーターソート', level: 'レベル {n}', moves: '手数',
-      undo: '戻す', restart: 'やり直す', hint: 'ヒント', hintAd: '広告ヒント', addVial: '瓶追加', skip: 'スキップ',
+      undo: '戻す', restart: 'やり直す', hint: 'ヒント', hintAd: '広告ヒント', addVial: '瓶追加', skip: 'スキップ', share: 'シェア',
+      shareText: 'ウォーターソートでレベル {n}、{moves} 手。', copied: 'リンクをコピーしました',
       tip: '瓶をタップして、もう一つの瓶へ。同じ色だけ重なります。空瓶も使えます。', rack: '瓶', sep: '、', done: '、完成',
       bottleEmpty: '{n}本目、空', bottle: '{n}本目、下から {colors}',
       pour: '{color}を{n}本目に注ぐ', pick: '{n}本目を持った', drop: '置いた', swap: '{n}本目に持ち替えた', blocked: '注げません',
@@ -81,7 +85,8 @@
     },
     ko: {
       title: '물정렬', level: '{n}단계', moves: '횟수',
-      undo: '취소', restart: '다시', hint: '힌트', hintAd: '광고 힌트', addVial: '병 추가', skip: '건너뛰기',
+      undo: '취소', restart: '다시', hint: '힌트', hintAd: '광고 힌트', addVial: '병 추가', skip: '건너뛰기', share: '공유',
+      shareText: '물정렬 {n}단계, {moves}번.', copied: '링크를 복사했습니다',
       tip: '병을 고른 뒤 다른 병에 따르세요. 같은 색만 쌓이고, 빈 병도 됩니다.', rack: '물병', sep: ', ', done: ', 완료',
       bottleEmpty: '{n}번 병, 비어 있음', bottle: '{n}번 병, 아래부터 {colors}',
       pour: '{color}을 {n}번 병에 따르기', pick: '{n}번 병을 집음', drop: '내려놓음', swap: '{n}번 병으로 바꿈', blocked: '따를 수 없음',
@@ -96,7 +101,8 @@
     },
     ru: {
       title: 'Сортировка воды', level: 'Уровень {n}', moves: 'Ходы',
-      undo: 'Отмена', restart: 'Заново', hint: 'Подсказка', hintAd: 'За рекламу', addVial: '+Колба', skip: 'Пропуск',
+      undo: 'Отмена', restart: 'Заново', hint: 'Подсказка', hintAd: 'За рекламу', addVial: '+Колба', skip: 'Пропуск', share: 'Поделиться',
+      shareText: 'Сортировка воды: уровень {n}, {moves} ходов.', copied: 'Ссылка скопирована',
       tip: 'Нажмите колбу, затем другую. Сливать можно только одинаковый цвет. Пустые тоже можно.', rack: 'Колбы', sep: ', ', done: ', готово',
       bottleEmpty: 'Колба {n}, пусто', bottle: 'Колба {n}, снизу вверх {colors}',
       pour: 'Перелить {color} в колбу {n}', pick: 'Взята колба {n}', drop: 'Отпущено', swap: 'Теперь колба {n}', blocked: 'Сюда нельзя перелить',
@@ -111,7 +117,8 @@
     },
     es: {
       title: 'Ordenar agua', level: 'Nivel {n}', moves: 'Movimientos',
-      undo: 'Deshacer', restart: 'Reiniciar', hint: 'Pista', hintAd: 'Pista anuncio', addVial: '+Tubo', skip: 'Saltar',
+      undo: 'Deshacer', restart: 'Reiniciar', hint: 'Pista', hintAd: 'Pista anuncio', addVial: '+Tubo', skip: 'Saltar', share: 'Compartir',
+      shareText: 'Llegué al nivel {n} de Ordenar agua en {moves} movimientos.', copied: 'Enlace copiado',
       tip: 'Toca un tubo y luego otro. Solo se apila el mismo color. Los vacíos valen.', rack: 'Tubos', sep: ', ', done: ', listo',
       bottleEmpty: 'Tubo {n}, vacío', bottle: 'Tubo {n}, de abajo arriba {colors}',
       pour: 'Verter {color} en el tubo {n}', pick: 'Tubo {n} cogido', drop: 'Soltado', swap: 'Ahora el tubo {n}', blocked: 'No se puede verter',
@@ -126,7 +133,8 @@
     },
     pt: {
       title: 'Ordenar água', level: 'Nível {n}', moves: 'Jogadas',
-      undo: 'Desfazer', restart: 'Recomeçar', hint: 'Dica', hintAd: 'Dica anúncio', addVial: '+Tubo', skip: 'Pular',
+      undo: 'Desfazer', restart: 'Recomeçar', hint: 'Dica', hintAd: 'Dica anúncio', addVial: '+Tubo', skip: 'Pular', share: 'Partilhar',
+      shareText: 'Cheguei ao nível {n} de Ordenar água em {moves} jogadas.', copied: 'Link copiado',
       tip: 'Toque num tubo e depois noutro. Só a mesma cor empilha. Tubos vazios servem.', rack: 'Tubos', sep: ', ', done: ', pronto',
       bottleEmpty: 'Tubo {n}, vazio', bottle: 'Tubo {n}, de baixo para cima {colors}',
       pour: 'Despejar {color} no tubo {n}', pick: 'Tubo {n} na mão', drop: 'Largado', swap: 'Agora o tubo {n}', blocked: 'Não dá para despejar',
@@ -141,7 +149,8 @@
     },
     vi: {
       title: 'Xếp nước', level: 'Màn {n}', moves: 'Lượt',
-      undo: 'Hoàn tác', restart: 'Chơi lại', hint: 'Gợi ý', hintAd: 'Gợi ý QC', addVial: '+Ống', skip: 'Bỏ qua',
+      undo: 'Hoàn tác', restart: 'Chơi lại', hint: 'Gợi ý', hintAd: 'Gợi ý QC', addVial: '+Ống', skip: 'Bỏ qua', share: 'Chia sẻ',
+      shareText: 'Tôi tới màn {n} của Xếp nước sau {moves} lượt.', copied: 'Đã chép liên kết',
       tip: 'Chạm một ống, rồi ống khác. Chỉ màu giống mới xếp được. Ống trống cũng được.', rack: 'Ống nước', sep: ', ', done: ', xong',
       bottleEmpty: 'Ống {n}, trống', bottle: 'Ống {n}, từ dưới lên {colors}',
       pour: 'Đổ {color} vào ống {n}', pick: 'Đã cầm ống {n}', drop: 'Đã đặt xuống', swap: 'Đổi sang ống {n}', blocked: 'Không đổ được',
@@ -156,7 +165,8 @@
     },
     id: {
       title: 'Sortir Air', level: 'Level {n}', moves: 'Langkah',
-      undo: 'Urung', restart: 'Ulang', hint: 'Petunjuk', hintAd: 'Iklan', addVial: '+Tabung', skip: 'Lewati',
+      undo: 'Urung', restart: 'Ulang', hint: 'Petunjuk', hintAd: 'Iklan', addVial: '+Tabung', skip: 'Lewati', share: 'Bagikan',
+      shareText: 'Saya sampai level {n} di Sortir Air dalam {moves} langkah.', copied: 'Tautan disalin',
       tip: 'Ketuk satu tabung, lalu tabung lain. Hanya warna sama yang bisa ditumpuk. Tabung kosong boleh.', rack: 'Tabung', sep: ', ', done: ', selesai',
       bottleEmpty: 'Tabung {n}, kosong', bottle: 'Tabung {n}, dari bawah {colors}',
       pour: 'Tuangkan {color} ke tabung {n}', pick: 'Mengambil tabung {n}', drop: 'Diletakkan', swap: 'Beralih ke tabung {n}', blocked: 'Tidak bisa dituang',
@@ -171,7 +181,8 @@
     },
     th: {
       title: 'เรียงน้ำ', level: 'ด่าน {n}', moves: 'จำนวนครั้ง',
-      undo: 'ย้อน', restart: 'เริ่มใหม่', hint: 'คำใบ้', hintAd: 'ดูโฆษณา', addVial: '+หลอด', skip: 'ข้าม',
+      undo: 'ย้อน', restart: 'เริ่มใหม่', hint: 'คำใบ้', hintAd: 'ดูโฆษณา', addVial: '+หลอด', skip: 'ข้าม', share: 'แชร์',
+      shareText: 'ฉันถึงด่าน {n} ของเรียงน้ำ ใน {moves} ครั้ง', copied: 'คัดลอกลิงก์แล้ว',
       tip: 'แตะหลอด แล้วแตะอีกหลอด สีเดียวกันเท่านั้นที่ซ้อนได้ หลอดว่างก็ใช้ได้', rack: 'หลอดน้ำ', sep: ', ', done: ', เสร็จ',
       bottleEmpty: 'หลอด {n} ว่าง', bottle: 'หลอด {n} จากล่างขึ้นบน {colors}',
       pour: 'เท{color}ลงหลอด {n}', pick: 'หยิบหลอด {n}', drop: 'วางแล้ว', swap: 'เปลี่ยนเป็นหลอด {n}', blocked: 'เทไม่ได้',
@@ -186,7 +197,8 @@
     },
     tr: {
       title: 'Su Sıralama', level: 'Seviye {n}', moves: 'Hamle',
-      undo: 'Geri al', restart: 'Yeniden', hint: 'İpucu', hintAd: 'Reklam ipucu', addVial: '+Tüp', skip: 'Atla',
+      undo: 'Geri al', restart: 'Yeniden', hint: 'İpucu', hintAd: 'Reklam ipucu', addVial: '+Tüp', skip: 'Atla', share: 'Paylaş',
+      shareText: 'Su Sıralama seviye {n}, {moves} hamle.', copied: 'Bağlantı kopyalandı',
       tip: 'Bir tüpe, sonra diğerine dokun. Yalnızca aynı renk üst üste gelir. Boş tüp de olur.', rack: 'Tüpler', sep: ', ', done: ', bitti',
       bottleEmpty: 'Tüp {n}, boş', bottle: 'Tüp {n}, alttan üste {colors}',
       pour: '{color} rengini {n}. tüpe dök', pick: '{n}. tüp alındı', drop: 'Bırakıldı', swap: '{n}. tüpe geçildi', blocked: 'Oraya dökülemez',

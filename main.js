@@ -37,6 +37,7 @@
   var hintBtn = document.getElementById('hint');
   var addVialBtn = document.getElementById('add-vial');
   var skipBtn = document.getElementById('skip');
+  var shareBtn = document.getElementById('share');
   var langSel = document.getElementById('lang');
   var titleEl = document.getElementById('title');
   var movesLabel = document.getElementById('moves-label');
@@ -48,6 +49,7 @@
   var ovText = document.getElementById('ov-text');
   var ovPrimary = document.getElementById('ov-primary');
   var ovSecondary = document.getElementById('ov-secondary');
+  var ovShare = document.getElementById('ov-share');
   var statusEl = document.getElementById('status');
 
   var state = null;
@@ -697,6 +699,8 @@
     ovText.textContent = text;
     ovPrimary.textContent = primaryLabel;
     primaryFn = onPrimary;
+    ovShare.textContent = t('share');
+    ovShare.classList.toggle('hidden', kind !== 'win');
     if (secondaryLabel) {
       ovSecondary.textContent = secondaryLabel;
       ovSecondary.classList.remove('hidden');
@@ -794,6 +798,7 @@
     movesLabel.textContent = t('moves');
     undoBtn.textContent = t('undo');
     restartBtn.textContent = t('restart');
+    shareBtn.textContent = t('share');
     tipEl.textContent = t('tip');
     rack.setAttribute('aria-label', t('rack'));
     langSel.innerHTML = '';
@@ -811,6 +816,36 @@
     }
     if (overlayKind === 'win') showWin();
     else if (overlayKind === 'stuck') showStuck();
+  }
+
+  function pageUrl() {
+    if (/^https:\/\/frankxulock\.github\.io\/water-sort\/?/i.test(location.href)) {
+      return 'https://frankxulock.github.io/water-sort/';
+    }
+    var href = String(location.href || '').split('#')[0].split('?')[0];
+    return href || 'https://frankxulock.github.io/water-sort/';
+  }
+
+  function shareGame() {
+    var url = pageUrl();
+    var text = t('shareText', { n: state ? state.level : 1, moves: state ? state.moves : 0 });
+    var tg = window.Telegram && window.Telegram.WebApp;
+    var shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text);
+    if (tg && tg.initData && typeof tg.openTelegramLink === 'function') {
+      try { tg.openTelegramLink(shareUrl); return; } catch (e) {}
+    }
+    if (navigator.share) {
+      navigator.share({ title: t('title'), text: text, url: url }).catch(function () {});
+      return;
+    }
+    var full = text + '\n' + url;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(full).then(function () { notice(t('copied')); }, function () {
+        window.open(shareUrl, '_blank', 'noopener');
+      });
+      return;
+    }
+    window.open(shareUrl, '_blank', 'noopener');
   }
 
   function boot() {
@@ -835,6 +870,8 @@
   hintBtn.addEventListener('click', showHint);
   addVialBtn.addEventListener('click', addVial);
   skipBtn.addEventListener('click', skipLevel);
+  shareBtn.addEventListener('click', shareGame);
+  ovShare.addEventListener('click', shareGame);
   langSel.addEventListener('change', function () {
     I.set(langSel.value);
     applyChrome();
