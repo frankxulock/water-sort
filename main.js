@@ -6,20 +6,21 @@
   if (!L) return;
 
   var COLORS = [
-    { name: '红', hex: '#ff4d6e', deep: '#c41048', lite: '#ff9aaf' },
-    { name: '橙', hex: '#ff8a24', deep: '#d85a00', lite: '#ffc27a' },
-    { name: '黄', hex: '#f6c431', deep: '#d09a00', lite: '#ffe28a' },
-    { name: '绿', hex: '#3dce74', deep: '#128a44', lite: '#8ef0b4' },
-    { name: '青', hex: '#2ad4c8', deep: '#0c8f86', lite: '#8af3e8' },
-    { name: '蓝', hex: '#4c8dff', deep: '#2458d4', lite: '#a4c4ff' },
-    { name: '紫', hex: '#b06bff', deep: '#722ee0', lite: '#d4b0ff' },
-    { name: '粉', hex: '#ff6bb5', deep: '#d42e7c', lite: '#ffb0d6' }
+    { key: 'red', hex: '#ff4d6e', deep: '#c41048', lite: '#ff9aaf' },
+    { key: 'orange', hex: '#ff8a24', deep: '#d85a00', lite: '#ffc27a' },
+    { key: 'yellow', hex: '#f6c431', deep: '#d09a00', lite: '#ffe28a' },
+    { key: 'green', hex: '#3dce74', deep: '#128a44', lite: '#8ef0b4' },
+    { key: 'cyan', hex: '#2ad4c8', deep: '#0c8f86', lite: '#8af3e8' },
+    { key: 'blue', hex: '#4c8dff', deep: '#2458d4', lite: '#a4c4ff' },
+    { key: 'purple', hex: '#b06bff', deep: '#722ee0', lite: '#d4b0ff' },
+    { key: 'pink', hex: '#ff6bb5', deep: '#d42e7c', lite: '#ffb0d6' }
   ];
 
   var STORAGE = 'water-sort-puzzle-v1';
   var MAX_EXTRA = 1;
   var FREE_HINTS = 1;
-  var TIP = '点一瓶拿起，再点另一瓶倒入。同色才能叠，空瓶也可以。';
+  var I = window.WaterI18n;
+  function t(key, vars) { return I.t(key, vars); }
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var rack = document.getElementById('rack');
@@ -36,6 +37,9 @@
   var hintBtn = document.getElementById('hint');
   var addVialBtn = document.getElementById('add-vial');
   var skipBtn = document.getElementById('skip');
+  var langSel = document.getElementById('lang');
+  var titleEl = document.getElementById('title');
+  var movesLabel = document.getElementById('moves-label');
   var tipEl = document.querySelector('.tip');
   var Ads = window.WaterAds;
   var overlay = document.getElementById('overlay');
@@ -69,7 +73,7 @@
     say(text);
     tipEl.textContent = text;
     clearTimeout(tipTimer);
-    tipTimer = setTimeout(function () { tipEl.textContent = TIP; }, 2600);
+    tipTimer = setTimeout(function () { tipEl.textContent = t('tip'); }, 2600);
   }
 
   function adsOn() { return !!(Ads && Ads.configured()); }
@@ -85,8 +89,8 @@
     Ads.rewarded().then(function (result) {
       adBusy = false;
       if (result && result.ok) onReward();
-      else if (result && result.reason === 'skip') notice('没看完，这次没有奖励。');
-      else notice('广告没播成，这次没有奖励。');
+      else if (result && result.reason === 'skip') notice(t('adSkip'));
+      else notice(t('adFail'));
       updateHud();
     });
   }
@@ -99,11 +103,13 @@
     return COLORS[index] || COLORS[0];
   }
 
+  function colorName(index) { return t('c_' + colorOf(index).key); }
+
   function aria(index, tube) {
-    if (!tube.length) return '第' + (index + 1) + '瓶，空';
-    var names = tube.map(function (c) { return colorOf(c).name; });
-    var done = L.isComplete(tube) ? '，已完成' : '';
-    return '第' + (index + 1) + '瓶，从底到顶 ' + names.join('、') + done;
+    if (!tube.length) return t('bottleEmpty', { n: index + 1 });
+    var names = tube.map(function (c) { return colorName(c); });
+    var done = L.isComplete(tube) ? t('done') : '';
+    return t('bottle', { n: index + 1, colors: names.join(t('sep')) }) + done;
   }
 
   function layersFrom(tube, delta, color) {
@@ -270,7 +276,7 @@
   }
 
   function updateHud() {
-    levelEl.textContent = '第 ' + state.level + ' 关';
+    levelEl.textContent = t('level', { n: state.level });
     if (shownMoves !== state.moves) {
       movesEl.textContent = String(state.moves);
       if (shownMoves >= 0) {
@@ -282,7 +288,9 @@
     }
     undoBtn.disabled = !state.history.length;
     hintBtn.disabled = busy || adBusy;
-    hintBtn.textContent = hintNeedsAd() ? '广告提示' : '提示';
+    hintBtn.textContent = hintNeedsAd() ? t('hintAd') : t('hint');
+    addVialBtn.textContent = t('addVial');
+    skipBtn.textContent = t('skip');
     addVialBtn.classList.toggle('hidden', !adsOn());
     addVialBtn.disabled = busy || adBusy || !canAddVial();
     skipBtn.classList.toggle('hidden', !adsOn());
@@ -382,7 +390,7 @@
     paintSelection();
     updateHud();
     save();
-    say('把' + colorOf(res.color).name + '色倒进第' + (to + 1) + '瓶');
+    say(t('pour', { color: colorName(res.color), n: to + 1 }));
 
     if (reduceMotion) {
       paintTube(from, state.tubes[from], 0, null);
@@ -524,13 +532,13 @@
       }
       selected = index;
       paintSelection();
-      say('拿起第' + (index + 1) + '瓶');
+      say(t('pick', { n: index + 1 }));
       return;
     }
     if (selected === index) {
       selected = -1;
       paintSelection();
-      say('放下了');
+      say(t('drop'));
       return;
     }
     var res = L.pour(state.tubes, selected, index);
@@ -538,10 +546,10 @@
       if (tube.length && !L.isComplete(tube)) {
         selected = index;
         paintSelection();
-        say('改拿第' + (index + 1) + '瓶');
+        say(t('swap', { n: index + 1 }));
       } else {
         shake(index);
-        say('倒不进去');
+        say(t('blocked'));
       }
       return;
     }
@@ -560,7 +568,7 @@
     renderBoard();
     updateHud();
     save();
-    say('已撤销');
+    say(t('undone'));
   }
 
   function applyLevel(level, keepSeedTubes) {
@@ -583,7 +591,7 @@
     renderBoard();
     updateHud();
     save();
-    say('第' + state.level + '关');
+    say(t('levelIn', { n: state.level }));
   }
 
   function restart() {
@@ -612,14 +620,14 @@
       renderBoard();
       updateHud();
       save();
-      notice('多了一个空瓶，这一关都有效。');
+      notice(t('extra'));
     });
   }
 
   function skipLevel() {
     watchAd(function () {
       nextLevel();
-      notice('跳过了，进入第 ' + state.level + ' 关。');
+      notice(t('skipped', { n: state.level }));
     });
   }
 
@@ -630,7 +638,7 @@
   function showHint() {
     if (busy || adBusy || !overlay.classList.contains('hidden')) return;
     if (!L.hint(state.tubes)) {
-      say('现在没有能倒的瓶子');
+      say(t('noMove'));
       return;
     }
     if (hintNeedsAd()) watchAd(giveHint);
@@ -640,7 +648,7 @@
   function giveHint() {
     var move = L.hint(state.tubes);
     if (!move) {
-      say('现在没有能倒的瓶子');
+      say(t('noMove'));
       return;
     }
     selected = move.from;
@@ -650,13 +658,14 @@
     void dest.offsetWidth;
     dest.classList.add('hint');
     setTimeout(function () { dest.classList.remove('hint'); }, 1200);
-    say('试试把第' + (move.from + 1) + '瓶倒进第' + (move.to + 1) + '瓶');
+    say(t('tryPour', { from: move.from + 1, to: move.to + 1 }));
     state.hints++;
     updateHud();
     save();
   }
 
   function hideOverlay() {
+    overlayKind = '';
     overlay.classList.add('hidden');
     var bits = overlay.querySelector('.confetti');
     if (bits) bits.remove();
@@ -677,7 +686,11 @@
     overlay.appendChild(box);
   }
 
+  var overlayKind = '';
+
   function showOverlay(kind, title, text, primaryLabel, onPrimary, secondaryLabel, onSecondary) {
+    var wasHidden = overlay.classList.contains('hidden');
+    overlayKind = kind;
     ovMark.textContent = kind === 'win' ? '✓' : '!';
     ovMark.classList.toggle('warn', kind !== 'win');
     ovTitle.textContent = title;
@@ -693,21 +706,21 @@
       secondaryFn = null;
     }
     overlay.classList.remove('hidden');
-    if (kind === 'win' && !reduceMotion) burst();
+    if (kind === 'win' && !reduceMotion && wasHidden) burst();
   }
 
   function showWin() {
-    say('过关了');
-    showOverlay('win', '过关了', '第 ' + state.level + ' 关完成，用了 ' + state.moves + ' 步。', '下一关', nextLevel, '再玩本关', restart);
+    say(t('winSay'));
+    showOverlay('win', t('winTitle'), t('winBody', { n: state.level, moves: state.moves }), t('next'), nextLevel, t('replay'), restart);
   }
 
   function showStuck() {
-    say('这一步走不通');
+    say(t('stuckSay'));
     if (canAddVial()) {
-      showOverlay('stuck', '倒不开了', '看一段广告多一个空瓶，或者撤销几步。', '看广告加空瓶', addVial,
-        state.history.length ? '撤销' : '重开', state.history.length ? undo : restart);
-    } else if (!state.history.length) showOverlay('stuck', '倒不开了', '这一关需要重开。', '重开', restart);
-    else showOverlay('stuck', '倒不开了', '撤销几步，或者重开这一关。', '撤销', undo, '重开', restart);
+      showOverlay('stuck', t('stuckTitle'), t('stuckAd'), t('stuckAdBtn'), addVial,
+        state.history.length ? t('undo') : t('restart'), state.history.length ? undo : restart);
+    } else if (!state.history.length) showOverlay('stuck', t('stuckTitle'), t('stuckRestart'), t('restart'), restart);
+    else showOverlay('stuck', t('stuckTitle'), t('stuckUndo'), t('undo'), undo, t('restart'), restart);
   }
 
   function cleanHistory(history, tubeCount) {
@@ -773,8 +786,36 @@
     } catch (e) {}
   }
 
+  function applyChrome() {
+    var code = I.code();
+    document.documentElement.lang = code === 'zh-TW' ? 'zh-Hant' : code === 'zh-CN' ? 'zh-Hans' : code;
+    document.title = t('title');
+    titleEl.textContent = t('title');
+    movesLabel.textContent = t('moves');
+    undoBtn.textContent = t('undo');
+    restartBtn.textContent = t('restart');
+    tipEl.textContent = t('tip');
+    rack.setAttribute('aria-label', t('rack'));
+    langSel.innerHTML = '';
+    I.options.forEach(function (item) {
+      var opt = document.createElement('option');
+      opt.value = item.id;
+      opt.textContent = item.label;
+      langSel.appendChild(opt);
+    });
+    langSel.value = code;
+    if (!state) return;
+    updateHud();
+    for (var i = 0; i < tubeEls.length; i++) {
+      tubeEls[i].setAttribute('aria-label', aria(i, state.tubes[i]));
+    }
+    if (overlayKind === 'win') showWin();
+    else if (overlayKind === 'stuck') showStuck();
+  }
+
   function boot() {
     setupTelegram();
+    applyChrome();
     var saved = load();
     if (!saved) {
       applyLevel(L.createLevel(1, randSeed()));
@@ -794,6 +835,10 @@
   hintBtn.addEventListener('click', showHint);
   addVialBtn.addEventListener('click', addVial);
   skipBtn.addEventListener('click', skipLevel);
+  langSel.addEventListener('change', function () {
+    I.set(langSel.value);
+    applyChrome();
+  });
   ovPrimary.addEventListener('click', function () { if (primaryFn) primaryFn(); });
   ovSecondary.addEventListener('click', function () { if (secondaryFn) secondaryFn(); });
   stage.addEventListener('contextmenu', function (e) { e.preventDefault(); });

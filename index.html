@@ -26,10 +26,11 @@
 <div class="app">
   <header class="head">
     <div class="title-row">
-      <h1><span class="logo" aria-hidden="true"></span>倒水排序</h1>
+      <h1><span class="logo" aria-hidden="true"></span><span id="title">倒水排序</span></h1>
       <div class="pills">
         <span class="pill" id="level">第 1 关</span>
-        <span class="pill">步数 <b id="moves">0</b></span>
+        <span class="pill"><span id="moves-label">步数</span> <b id="moves">0</b></span>
+        <select id="lang" class="lang" aria-label="Language"></select>
       </div>
     </div>
     <div class="actions">
@@ -72,6 +73,7 @@ window.WATER_ADS = {
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 <script src="ads.js"></script>
+<script src="i18n.js"></script>
 <script src="logic.js"></script>
 <script src="main.js"></script>
 </body>
