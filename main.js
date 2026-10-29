@@ -800,6 +800,7 @@
     restartBtn.textContent = t('restart');
     shareBtn.textContent = t('share');
     tipEl.textContent = t('tip');
+    if (window.PlayMore) PlayMore.paint();
     rack.setAttribute('aria-label', t('rack'));
     langSel.innerHTML = '';
     I.options.forEach(function (item) {
